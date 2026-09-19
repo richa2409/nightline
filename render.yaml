@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: nightline
+    runtime: docker
+    plan: free
+    region: singapore
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    healthCheckPath: /health
+    envVars:
+      - key: ENV
+        value: production
+      - key: DEBUG
+        value: false
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "1440"
+      - key: MIN_SHARED_INTEREST_SCORE
+        value: "0.15"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: nightline-db
+          property: connectionString
+      - key: REDIS_URL
+        fromService:
+          name: nightline-cache
+          type: keyvalue
+          property: connectionString
+
+  - type: keyvalue
+    name: nightline-cache
+    plan: free
+    region: singapore
+    ipAllowList: []
+
+databases:
+  - name: nightline-db
+    plan: free
+    region: singapore

@@ -1,7 +1,9 @@
 import logging
+from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.config import settings
 from app.database import Base, engine
@@ -29,6 +31,15 @@ app.include_router(user_routes.router)
 app.include_router(match_routes.router)
 app.include_router(chat_routes.router)
 
+# Nginx strips `/api` in the local Compose stack. Render serves the SPA from
+# this same FastAPI process, so retain the prefixed aliases there as well.
+api_router = APIRouter(prefix="/api")
+api_router.include_router(auth_routes.router)
+api_router.include_router(user_routes.router)
+api_router.include_router(match_routes.router)
+api_router.include_router(chat_routes.router)
+app.include_router(api_router)
+
 
 @app.on_event("startup")
 def on_startup():
@@ -41,3 +52,10 @@ def on_startup():
 def health_check():
     """Used by Docker healthcheck + k8s readiness/liveness probes."""
     return {"status": "ok", "env": settings.ENV}
+
+
+# The local Compose stack serves the frontend through Nginx. The Render image
+# also copies these assets so one public web service can host the SPA and API.
+frontend_dir = Path("/app/frontend")
+if frontend_dir.is_dir():
+    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
