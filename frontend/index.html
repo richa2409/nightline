@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nightline — talk to someone new</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain"></div>
+
+<!-- ============ LANDING ============ -->
+<section id="view-landing" class="view view--landing">
+  <nav class="topbar">
+    <span class="wordmark">Nightline</span>
+  </nav>
+
+  <div class="hero">
+    <h1 class="hero__title">A stranger who<br>gets what you're into.</h1>
+    <p class="hero__sub">
+      Tell us what you care about. We'll quietly match you with someone
+      who cares about it too — no names, no photos, no history.
+    </p>
+    <div class="hero__actions">
+      <button class="btn btn--primary" data-nav="signup">Find someone to talk to</button>
+      <button class="btn btn--ghost" data-nav="login">I already have an account</button>
+    </div>
+  </div>
+
+  <div class="hero__footnote">Your account keeps your streaks. Everyone you meet only sees a handle.</div>
+</section>
+
+<!-- ============ AUTH ============ -->
+<section id="view-signup" class="view view--auth hidden">
+  <button class="back" data-nav="landing">&larr;</button>
+  <div class="auth-card">
+    <h2>Make an account</h2>
+    <p class="auth-card__hint">Just for you to keep coming back. Nobody else ever sees this email.</p>
+    <form id="form-signup">
+      <label>Email
+        <input type="email" name="email" required autocomplete="email">
+      </label>
+      <label>Password
+        <input type="password" name="password" minlength="8" required autocomplete="new-password">
+      </label>
+      <label>What are you into? <span class="label-note">(this is how we find your match)</span>
+        <textarea name="interests" rows="3" placeholder="jazz records, long-distance running, medieval history, existential dread..."></textarea>
+      </label>
+      <button class="btn btn--primary btn--block" type="submit">Create account</button>
+    </form>
+    <p class="auth-card__error" id="signup-error"></p>
+  </div>
+</section>
+
+<section id="view-login" class="view view--auth hidden">
+  <button class="back" data-nav="landing">&larr;</button>
+  <div class="auth-card">
+    <h2>Welcome back</h2>
+    <form id="form-login">
+      <label>Email
+        <input type="email" name="email" required autocomplete="email">
+      </label>
+      <label>Password
+        <input type="password" name="password" required autocomplete="current-password">
+      </label>
+      <button class="btn btn--primary btn--block" type="submit">Log in</button>
+    </form>
+    <p class="auth-card__error" id="login-error"></p>
+  </div>
+</section>
+
+<!-- ============ WAITING ROOM / QUEUE ============ -->
+<section id="view-waiting" class="view view--waiting hidden">
+  <div class="pulse-ring"></div>
+  <h2 class="waiting__title">Looking for your match&hellip;</h2>
+  <p class="waiting__sub" id="waiting-sub">Comparing interests with everyone else waiting right now.</p>
+  <button class="btn btn--ghost" id="btn-cancel-queue">Cancel</button>
+</section>
+
+<!-- ============ CHAT ============ -->
+<section id="view-chat" class="view view--chat hidden">
+  <header class="chat-header">
+    <div>
+      <div class="chat-header__handle" id="partner-handle">—</div>
+      <div class="chat-header__score" id="match-score">shared interest score: —</div>
+    </div>
+    <button class="btn btn--ghost btn--small" id="btn-end-chat">End chat</button>
+  </header>
+
+  <div class="chat-log" id="chat-log"></div>
+
+  <form class="chat-input" id="form-chat-input">
+    <input type="text" id="chat-message" placeholder="Say something…" autocomplete="off">
+    <button class="btn btn--primary" type="submit">Send</button>
+  </form>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
